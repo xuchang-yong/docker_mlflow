@@ -1,0 +1,39 @@
+FROM continuumio/miniconda3:23.3.1-0
+RUN echo **** API ****
+
+## Install jemalloc
+#RUN apt-get update && apt-get install -y libjemalloc-dev
+## Set LD_PRELOAD to use jemalloc
+#ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so
+
+ENV TZ=Europe/Warsaw
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get -y upgrade
+
+#RUN pip install --upgrade pip
+RUN pip install conda-lock
+
+COPY docker/conda-cfg/conda-lock-api.yml /tmp/conda-lock.yml
+
+RUN conda-lock install --name c_env /tmp/conda-lock.yml && \
+    conda clean -afy && \
+    echo "source activate c_env" >> ~/.bashrc
+
+SHELL ["/bin/bash", "--login", "-c"]
+
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/opt/conda/lib
+#RUN pip install --no-cache-dir torch==2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+
+RUN find /opt/conda/ -follow -type f -name '*.a' -delete && \
+ find /opt/conda/ -follow -type f -name '*.pyc' -delete && \
+ find /opt/conda/ -follow -type f -name '*.js.map' -delete
+
+WORKDIR /src
+
+ENV PATH /opt/conda/envs/c_env/bin:$PATH
+
+ENTRYPOINT ["gunicorn", "--chdir", "api", "app:app", \
+            "-k", "uvicorn.workers.UvicornWorker",\
+             "-b", "0.0.0.0:5002", \
+             "--timeout", "120"]

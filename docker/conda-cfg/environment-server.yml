@@ -1,0 +1,12 @@
+name: server-repo
+channels:
+  - nodefaults
+  - conda-forge
+dependencies:
+  - python=3.10.10
+  - mlflow=2.4.0
+  - sqlite=3.42.0
+  - pip:
+    - alembic==1.11.1
+platforms:
+  - linux-64

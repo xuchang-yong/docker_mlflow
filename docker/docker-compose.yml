@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  server_mlflow:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.server
+    container_name: server_mlflow
+    ports:
+      - "5001:5001"
+    volumes:
+#      - ../mlartifacts:/mlartifacts
+      - ../db:/db
+      - ../src:/src
+    networks:
+      - A
+
+  api:
+    platform: linux/amd64
+    depends_on:
+      - server_mlflow
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    container_name: api
+    ports:
+      - "5002:5002"
+    volumes:
+      - ../src/api:/src/api
+    networks:
+      - A
+
+
+  mlops:
+    platform: linux/amd64
+    depends_on:
+      - server_mlflow
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.mlops
+    profiles: ['mlops']
+    container_name: mlops
+    volumes:
+      - ..src/ml:/src/ml
+    networks:
+      - A
+
+networks:
+  A:
+    driver: bridge
