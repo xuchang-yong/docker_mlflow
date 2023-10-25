@@ -6,9 +6,9 @@ That code describes 3-container infrastructure to run MLFLow + Conda
 
 ## System Architecture
 
-- MLFlow Server: A centralised hub for model repo, this server ensures that  ML models are stored, versioned, and easily accessible for other components [named: mlflow_server]
-- API: Powered by FastAPI, this component is key for model serving. It allows manual reloading, fetches fresh training data from the database, and stands as a bridge between our frontend and backend operations [named: api]
-- Training Container: As the name suggests, this container is responsible for training the ML model. Once the training step is completed, the model is uploaded to the MLFlow server [named: mlops]
+1. MLFlow Server: A centralised hub for model repo, this server ensures that  ML models are stored, versioned, and easily accessible for other components [named: mlflow_server]
+2. API: Powered by FastAPI, this component is key for model serving. It allows manual reloading, fetches fresh training data from the database, and stands as a bridge between our frontend and backend operations [named: api]
+3. Training Container: As the name suggests, this container is responsible for training the ML model. Once the training step is completed, the model is uploaded to the MLFlow server [named: mlops]
 
 ### FastAPI code
 The code under ./src/api is described in separate README.md under project  https://github.com/MidnightSkyUniverse/minimmedia
@@ -28,10 +28,10 @@ Every container utilizes its unique config file. Separate _environment-<NAME>.ym
 Unless your environment alters, these configurations remain maintenance-free
 
 ### Installation of Docker Containers
-- The ./docker/ directory holds essential Dockerfiles and a docker-compose.yml for container orchestration
-- Preparing the Environment: After pulling the code from the repository, navigate to the ./docker directory. This is where the magic begins
-- Deploying the MLflow Server & API Containers: From the ./docker directory, use the command docker compose up –build to build the primary containers. Once the containers are up and active, you can connect to the MLflow server at http://<IP>:5001 and the API at http://<IP>:5002. A successful connection to the MLflow UI or a message stating “Welcome to the API service!” from the API server confirms their operational status.
-- Launching the MLOps Container: This container is at the heart of model training. Running the command docker compose up mlops –build from the ./docker directory will kickstart the process. The code does not contain any files to initiate the process as I kept the code simple to show the Docker + MLFlow + Conda solution
+* The ./docker/ directory holds essential Dockerfiles and a docker-compose.yml for container orchestration
+* Preparing the Environment: After pulling the code from the repository, navigate to the ./docker directory. This is where the magic begins
+* Deploying the MLflow Server & API Containers: From the ./docker directory, use the command docker compose up –build to build the primary containers. Once the containers are up and active, you can connect to the MLflow server at http://<IP>:5001 and the API at http://<IP>:5002. A successful connection to the MLflow UI or a message stating “Welcome to the API service!” from the API server confirms their operational status.
+* Launching the MLOps Container: This container is at the heart of model training. Running the command docker compose up mlops –build from the ./docker directory will kickstart the process. The code does not contain any files to initiate the process as I kept the code simple to show the Docker + MLFlow + Conda solution
 
 ```
 # From within ./docker directory
