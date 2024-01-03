@@ -1,0 +1,11 @@
+FROM ghcr.io/mlflow/mlflow:v2.9.2
+RUN echo **** MlFlow Server-Repo ****
+
+ENV TZ=Asia/Singapore
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ENV portnum=5003
+ENV endpt_server=0.0.0.0
+EXPOSE $portnum
+# ENTRYPOINT ["mlflow", "server"]
+CMD mlflow server -p $portnum --host $endpt_server

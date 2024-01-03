@@ -1,12 +1,7 @@
-FROM continuumio/miniconda3:23.3.1-0
+FROM continuumio/miniconda3:latest
 RUN echo **** Server-Repo ****
 
-## Install jemalloc
-#RUN apt-get update &&  apt-get install -y libjemalloc-dev
-## Set LD_PRELOAD to use jemalloc
-#ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so
-
-ENV TZ=Europe/Warsaw
+ENV TZ=Asia/Singapore
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get -y upgrade

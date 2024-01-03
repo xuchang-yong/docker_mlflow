@@ -38,7 +38,8 @@ services:
       - server_mlflow
     build:
       context: ..
-      dockerfile: docker/Dockerfile.mlops
+#      dockerfile: docker/Dockerfile.mlops
+      dockerfile: docker/Docker.mlops
     profiles: ['mlops']
     container_name: mlops
     volumes:
